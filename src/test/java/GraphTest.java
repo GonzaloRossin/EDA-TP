@@ -3,7 +3,7 @@ import org.junit.jupiter.api.Test;
 public class GraphTest {
     @Test
     void testGraph(){
-        Graph graph=new Graph();
+        Graph graph=new Graph(false);
         graph.addNode("A");
         graph.addNode("B");
         graph.addNode("C");
@@ -12,11 +12,10 @@ public class GraphTest {
         graph.addEdge("B","C");
         graph.addEdge("C","D");
         graph.addEdge("D","B");
-        System.out.println(graph.toString());
     }
     @Test
     void testBFS(){
-        Graph graph=new Graph();
+        Graph graph=new Graph(false);
         graph.addNode("A");
         graph.addNode("B");
         graph.addNode("C");
@@ -32,6 +31,6 @@ public class GraphTest {
         graph.addEdge("D","E");
         graph.addEdge("F","E");
         graph.addEdge("E","G");
-        graph.BFS("A");
+        graph.printBfs("A");
     }
 }
