@@ -7,6 +7,8 @@ public class PlaceLocation {
   private String name;
 
   public PlaceLocation(String name) {
+    this.lat=lat;
+    this.lng=lng;
     this.name = name;
   }
 
