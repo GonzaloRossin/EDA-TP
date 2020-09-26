@@ -11,7 +11,7 @@ import java.util.List;
 public class ResourceReader {
 
     public static void main(String[] args) {
-        String Path="C:\\Users\\gonza\\Downloads\\TP EDA - Base\\src\\main\\resources\\espacios-culturales.csv";
+        String Path="G:\\EDA\\EDA-TP\\src\\main\\resources\\espacios-culturales.csv";
         String line;
         List<PlaceLocation> sites=new ArrayList<>();
         try {
