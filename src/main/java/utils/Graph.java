@@ -72,7 +72,6 @@ public class Graph {
 
         while (!priorityQueue.isEmpty()) {
             Node node = priorityQueue.poll();
-
             for (Edge edge : node.getEdges()) {
                 Node v = edge.getTargetNode();
                 double weight = edge.getWeight();
