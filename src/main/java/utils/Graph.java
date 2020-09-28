@@ -3,20 +3,28 @@ import java.util.*;
 
 public class Graph {
     private final boolean isDirected;
-    public Map<String, Node> nodes;
+    public Map<BusStop, Node> nodes;
 
     public Graph(boolean isDirected) {
         this.isDirected = isDirected;
         nodes = new HashMap<>();
     }
 
-    public void addNode(String label) {
-        nodes.putIfAbsent(label, new Node(label));
+    public Graph(List<BusStop> busStops) {
+        this.isDirected = true;
+        this.nodes = new HashMap<>();
+        for(BusStop busStop : busStops) {
+            addNode(busStop);
+        }
     }
 
-    public void addEdge(String firstLabel, String secondLabel, double weight) {
-        Node node1 = nodes.get(firstLabel);
-        Node node2 = nodes.get(secondLabel);
+    public void addNode(BusStop stop) {
+        nodes.putIfAbsent(stop, new Node(stop));
+    }
+
+    public void addEdge(BusStop firstBus, BusStop secondBus, double weight) {
+        Node node1 = nodes.get(firstBus);
+        Node node2 = nodes.get(secondBus);
         if (node1 == null || node2 == null) return;
         node1.getEdges().add(new Edge(weight, node1, node2));
         if (!isDirected) {
@@ -24,17 +32,17 @@ public class Graph {
         }
     }
 
-    public void printBfs(String startingLabel) {
+    public void printBfs(BusStop startingBus) {
         resetAllNodes();
 
         Queue<Node> nodesToVisit = new LinkedList<>();
-        nodesToVisit.add(nodes.get(startingLabel));
+        nodesToVisit.add(nodes.get(startingBus));
 
         while (!nodesToVisit.isEmpty()) {
             Node current = nodesToVisit.remove();
             if (!current.isVisited()) {
                 current.setVisited();
-                System.out.println(current.getName());
+                System.out.println(current.getBusLine());
                 for (Edge edge : current.getEdges()) {
                     Node edgeNode = edge.getTargetNode();
                     if (!edgeNode.isVisited()) {
@@ -45,9 +53,9 @@ public class Graph {
         }
     }
 
-    public void printDfs(String startingLabel) {
+    public void printDfs(BusStop startingBus) {
         resetAllNodes();
-        printDfsRec(nodes.get(startingLabel));
+        printDfsRec(nodes.get(startingBus));
     }
 
     private void printDfsRec(Node node) {
@@ -55,7 +63,7 @@ public class Graph {
             return;
         }
         node.setVisited();
-        System.out.println(node.getName());
+        System.out.println(node.getBusLine());
 
         for (Edge edge : node.getEdges()) {
             Node edgeNode = edge.getTargetNode();

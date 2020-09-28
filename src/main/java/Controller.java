@@ -1,5 +1,7 @@
 import model.BusInPath;
 import model.PlaceLocation;
+import utils.BusStop;
+import utils.Graph;
 
 import java.util.Arrays;
 import java.util.List;
@@ -7,6 +9,9 @@ import java.util.List;
 public class Controller {
 
   public Controller() {
+      List<BusStop> busStops = ResourceReader.getBusStops();
+      Graph graph = new Graph(busStops);
+      System.out.println("Done");
   }
 
   public List<BusInPath> findPath(double fromLat, double fromLng, double toLat, double toLng) {

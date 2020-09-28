@@ -1,5 +1,6 @@
 import model.BusInPath;
 import model.PlaceLocation;
+import utils.BusStop;
 import utils.Graph;
 import utils.Qgrams;
 
@@ -7,6 +8,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class ResourceReader {
@@ -27,46 +29,25 @@ public class ResourceReader {
         }
         return sites;
     }
-    public Map<Integer, Map<String, ArrayList<PlaceLocation>>> getBusStops() {
+    public static List<BusStop> getBusStops() {
         String Path="G:\\EDA\\EDA-TP\\src\\main\\resources\\paradas-de-colectivo.csv";
         String line;
 
-        Map<Integer, Map<String, ArrayList<PlaceLocation>>> holder = new HashMap<>();
+        List<BusStop> stops = new ArrayList<>();
         try {
             BufferedReader buffer= new BufferedReader(new FileReader(Path));
             buffer.readLine();
             List<PlaceLocation> sites=new ArrayList<>();
             while((line=buffer.readLine())!=null){
                 String[] value=line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
-                parseData(holder, Double.parseDouble(value[3]), Double.parseDouble(value[4]), Integer.parseInt(value[7]), value[8], value[10]);
+                stops.add(new BusStop(Integer.parseInt(value[7]), value[8], value[2], value[10], Double.parseDouble(value[3]), Double.parseDouble(value[4])));
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return holder;
+        return stops;
     }
 
-    public static void parseData(Map<Integer, Map<String, ArrayList<PlaceLocation>>> holder, Double stop_lat, Double stop_lon, int agency_id, String route_short_name, String route_desc) {
-            if(!holder.containsKey(agency_id)) {
-                HashMap<String, ArrayList<PlaceLocation>> routes = new HashMap<>();
-                ArrayList<PlaceLocation> stops = new ArrayList<>();
-                stops.add(new PlaceLocation(route_desc, stop_lat, stop_lon));
-                routes.put(route_short_name, stops);
-                holder.put(agency_id, routes);
-            } else {
-                Map<String, ArrayList<PlaceLocation>> routes = holder.get(agency_id);
-                ArrayList<PlaceLocation> stops;
-                if(!routes.containsKey(route_short_name)) {
-                    stops = new ArrayList<>();
-
-                } else {
-                    stops = routes.get(route_short_name);
-                }
-                stops.add(new PlaceLocation(route_desc, stop_lat, stop_lon));
-                routes.put(route_short_name, stops);
-                holder.put(agency_id, routes);
-            }
-    }
     public static PlaceLocation[] getTop10(String searchterm){
         int qgrams=8;
         searchterm=searchterm.toUpperCase();

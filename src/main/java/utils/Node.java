@@ -4,14 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Node implements Comparable<Node> {
-    private String name;
     private List<Edge> edges;
     private boolean visited;
     private Node previousNode;
     private double minDistance = Double.MAX_VALUE;
+    private BusStop busInfo;
 
-    public Node(String name) {
-        this.name = name;
+
+    public Node(BusStop busStop) {
+        this.busInfo = busStop;
         this.edges = new ArrayList<>();
     }
 
@@ -51,17 +52,22 @@ public class Node implements Comparable<Node> {
         return minDistance;
     }
 
+    public int getBusLine() {
+        return this.busInfo.getBusLine();
+    }
+
+    public String getRouteName() {
+        return this.busInfo.getRoute();
+    }
+
     public void setMinDistance(double minDistance) {
         this.minDistance = minDistance;
     }
 
-    public String getName() {
-        return name;
-    }
 
     @Override
     public String toString() {
-        return name;
+        return this.busInfo.toString();
     }
 
     @Override
