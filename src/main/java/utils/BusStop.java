@@ -63,6 +63,6 @@ public class BusStop {
 
     @Override
     public String toString() {
-        return "Bus " + getBusLine() + " route: " + getRoute() + " branch: " + getBranch() + " lat: " + getLatitude() + " long: " + getLongitude();
+        return "Bus " + getBusLine() + " Route: " + getRoute() + " Branch: " + getBranch() + " Lat: " + getLatitude() + " Long: " + getLongitude();
     }
 }
