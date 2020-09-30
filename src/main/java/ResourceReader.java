@@ -12,7 +12,7 @@ import java.lang.reflect.Array;
 import java.util.*;
 
 public class ResourceReader {
-    public static List<PlaceLocation> getSites(){
+    private static List<PlaceLocation> getSites(){
 
         String Path="C:\\Users\\gonza\\Downloads\\TP EDA - Base\\src\\main\\resources\\espacios-culturales.csv";
         String line;
@@ -50,7 +50,7 @@ public class ResourceReader {
     }
 
     public static PlaceLocation[] getTop10(String searchterm){
-        int qgrams=8;
+        int qgrams=2;
         searchterm=searchterm.toUpperCase();
         PlaceLocation[] top10=new PlaceLocation[10];
         boolean flag;

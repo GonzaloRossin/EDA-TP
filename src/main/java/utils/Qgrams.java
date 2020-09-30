@@ -1,7 +1,9 @@
 package utils;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Qgrams {
     private static String fillTokens(String str,int n){
@@ -29,10 +31,11 @@ public class Qgrams {
         List<String> ngramsstr2 = ngrams(n, str2);
         List<String> auxlist = new ArrayList<>();
         for (String aux : ngramsstr1) {
-            if (ngramsstr2.contains(aux) && (!auxlist.contains(aux)))
+            if (ngramsstr2.contains(aux))
                 auxlist.add(aux);
         }
-        int similarityresult = ngramsstr1.size() + ngramsstr2.size() - (ngramsstr1.size() + ngramsstr2.size() - 2 * auxlist.size());
-        return (double) similarityresult / (ngramsstr1.size() + ngramsstr2.size());
+        int similarityresult = ngramsstr1.size() + ngramsstr2.size() - (ngramsstr1.size() + ngramsstr2.size() - 2*auxlist.size());
+        double result=(double)similarityresult/(ngramsstr1.size()+ngramsstr2.size());
+        return result;
     }
 }
