@@ -20,11 +20,13 @@ public class Graph {
     public void EdgeFactory(){
         for(Node node: nodes.values()){
             for(Node targetnode:nodes.values()){
-                if(!node.equals(targetnode) && node.getBusLine()==targetnode.getBusLine() && HaversineDistance.distance(node.getLatitude(),node.getLongitude(),targetnode.getLatitude(),targetnode.getLongitude())<=250){
-                    node.addEdge(new Edge(0,node,targetnode,FormOfTransport.LINEA));
-                }
-                else if(!node.equals(targetnode) && node.getBusLine()!=targetnode.getBusLine() && HaversineDistance.distance(node.getLatitude(),node.getLongitude(),targetnode.getLatitude(),targetnode.getLongitude())<=150){
-                    node.addEdge(new Edge(0,node,targetnode,FormOfTransport.CAMINATA));
+                if(!node.equals(targetnode)){
+                    if(node.getBusLine()==targetnode.getBusLine() && HaversineDistance.distance(node.getLatitude(),node.getLongitude(),targetnode.getLatitude(),targetnode.getLongitude())<=250) {
+                        node.addEdge(new Edge(0, node, targetnode, FormOfTransport.LINEA));
+                    }
+                    else if(node.getBusLine()!=targetnode.getBusLine() && HaversineDistance.distance(node.getLatitude(),node.getLongitude(),targetnode.getLatitude(),targetnode.getLongitude())<=150){
+                        node.addEdge(new Edge(0,node,targetnode,FormOfTransport.CAMINATA));
+                    }
                 }
             }
         }
