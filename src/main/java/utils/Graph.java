@@ -17,18 +17,27 @@ public class Graph {
             addNode(busStop);
         }
     }
-
+    public void EdgeFactory(){
+        for(Node node: nodes.values()){
+            for(Node targetnode:nodes.values()){
+                if(!node.equals(targetnode) && node.getBusLine()==targetnode.getBusLine() && HaversineDistance.distance(node.getLatitude(),node.getLongitude(),targetnode.getLatitude(),targetnode.getLongitude())<=250){
+                    node.addEdge(new Edge(0,node,targetnode,FormOfTransport.LINEA));
+                }
+                else if(!node.equals(targetnode) && node.getBusLine()!=targetnode.getBusLine() && HaversineDistance.distance(node.getLatitude(),node.getLongitude(),targetnode.getLatitude(),targetnode.getLongitude())<=150){
+                    node.addEdge(new Edge(0,node,targetnode,FormOfTransport.CAMINATA));
+                }
+            }
+        }
+    }
     public void addNode(BusStop stop) {
         nodes.putIfAbsent(stop, new Node(stop));
     }
 
-    public void addEdge(BusStop firstBus, BusStop secondBus, double weight) {
-        Node node1 = nodes.get(firstBus);
-        Node node2 = nodes.get(secondBus);
-        if (node1 == null || node2 == null) return;
-        node1.getEdges().add(new Edge(weight, node1, node2));
+    public void addEdge(Node fromNode,Node  toNode, double weight,FormOfTransport type) {
+        if (fromNode == null || toNode == null) return;
+        fromNode.getEdges().add(new Edge(weight, fromNode, toNode,type));
         if (!isDirected) {
-            node2.getEdges().add(new Edge(weight, node2, node1));
+            toNode.getEdges().add(new Edge(weight, toNode, fromNode,type));
         }
     }
 

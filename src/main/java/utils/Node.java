@@ -56,6 +56,9 @@ public class Node implements Comparable<Node> {
         return this.busInfo.getBusLine();
     }
 
+    public double getLatitude(){return this.busInfo.getLatitude();}
+    public double getLongitude(){return this.busInfo.getLongitude();}
+
     public String getRouteName() {
         return this.busInfo.getRoute();
     }
