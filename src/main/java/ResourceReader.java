@@ -40,10 +40,9 @@ public class ResourceReader {
             List<PlaceLocation> sites=new ArrayList<>();
             while((line=buffer.readLine())!=null){
                 String[] value=line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
-                String[] aux = value[8].split("(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)");
-                stops.add(new BusStop(Integer.parseInt(aux[0]), aux[1], value[2], value[10], Double.parseDouble(value[3]), Double.parseDouble(value[4])));
+                stops.add(new BusStop(value[8], value[2], value[10], Double.parseDouble(value[3]), Double.parseDouble(value[4])));
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return stops;

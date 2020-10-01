@@ -4,7 +4,9 @@ import java.util.*;
 public class Graph {
     private final boolean isDirected;
     public Map<BusStop, Node> nodes;
-
+    final double BUS_SPEED = 16.67;
+    final double WALKING_SPEED = 1.34;
+    final double WALKING_PENALTY = 2;
     public Graph(boolean isDirected) {
         this.isDirected = isDirected;
         nodes = new HashMap<>();
@@ -17,25 +19,37 @@ public class Graph {
             addNode(busStop);
         }
     }
-    public void EdgeFactory(){
-        for(Node node: nodes.values()){
-            for(Node targetnode:nodes.values()){
-                if(!node.equals(targetnode)){
-                    if(node.getBusLine()==targetnode.getBusLine() && HaversineDistance.distance(node.getLatitude(),node.getLongitude(),targetnode.getLatitude(),targetnode.getLongitude())<=250) {
-                        node.addEdge(new Edge(0, node, targetnode, FormOfTransport.LINEA));
+    public void solveEdges(){
+        for(Node currentNode: nodes.values()){
+            for(Node targetNode : nodes.values()){
+                if(!currentNode.equals(targetNode)){
+                    double distance = HaversineDistance.distance(currentNode.getLatitude(), currentNode.getLongitude(), targetNode.getLatitude(), targetNode.getLongitude());
+                    if(currentNode.getRouteName().equals(targetNode.getRouteName()) && distance <= 250) {
+                        currentNode.addEdge(new Edge(calculateWeight(distance, FormOfTransport.LINEA), currentNode, targetNode, FormOfTransport.LINEA));
                     }
-                    else if(node.getBusLine()!=targetnode.getBusLine() && HaversineDistance.distance(node.getLatitude(),node.getLongitude(),targetnode.getLatitude(),targetnode.getLongitude())<=150){
-                        node.addEdge(new Edge(0,node,targetnode,FormOfTransport.CAMINATA));
+                    else if(!currentNode.getRouteName().equals(targetNode.getRouteName()) && distance <= 150){
+                        currentNode.addEdge(new Edge(calculateWeight(distance, FormOfTransport.CAMINATA), currentNode, targetNode, FormOfTransport.CAMINATA));
                     }
                 }
             }
         }
     }
+
+    private double calculateWeight(double distance, FormOfTransport transport) {
+        double res = 0;
+        if(transport == FormOfTransport.LINEA) {
+            res = distance / BUS_SPEED;
+        } else if(transport == FormOfTransport.CAMINATA) {
+            res = (distance / WALKING_SPEED) * WALKING_PENALTY;
+        }
+        return res;
+    }
+
     public void addNode(BusStop stop) {
         nodes.putIfAbsent(stop, new Node(stop));
     }
 
-    public void addEdge(Node fromNode,Node  toNode, double weight,FormOfTransport type) {
+    public void addEdge(Node fromNode,Node toNode, double weight, FormOfTransport type) {
         if (fromNode == null || toNode == null) return;
         fromNode.getEdges().add(new Edge(weight, fromNode, toNode,type));
         if (!isDirected) {
@@ -53,7 +67,7 @@ public class Graph {
             Node current = nodesToVisit.remove();
             if (!current.isVisited()) {
                 current.setVisited();
-                System.out.println(current.getBusLine());
+                System.out.println(current.getRouteName());
                 for (Edge edge : current.getEdges()) {
                     Node edgeNode = edge.getTargetNode();
                     if (!edgeNode.isVisited()) {
@@ -74,7 +88,7 @@ public class Graph {
             return;
         }
         node.setVisited();
-        System.out.println(node.getBusLine());
+        System.out.println(node.getRouteName());
 
         for (Edge edge : node.getEdges()) {
             Node edgeNode = edge.getTargetNode();

@@ -11,6 +11,7 @@ public class Controller {
   public Controller() {
       List<BusStop> busStops = ResourceReader.getBusStops();
       Graph graph = new Graph(busStops);
+      graph.solveEdges();
       System.out.println("Done");
   }
 

@@ -52,9 +52,6 @@ public class Node implements Comparable<Node> {
         return minDistance;
     }
 
-    public int getBusLine() {
-        return this.busInfo.getBusLine();
-    }
 
     public double getLatitude(){return this.busInfo.getLatitude();}
     public double getLongitude(){return this.busInfo.getLongitude();}
