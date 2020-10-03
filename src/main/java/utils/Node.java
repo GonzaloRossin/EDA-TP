@@ -4,7 +4,7 @@ import java.util.*;
 
 public class Node implements Comparable<Node> {
     private Set<Edge> edges;
-    private boolean visited;
+    private boolean visitCheck;
     private Node previousNode;
     private double minDistance = Double.MAX_VALUE;
     private BusStop busInfo;
@@ -28,11 +28,11 @@ public class Node implements Comparable<Node> {
     }
 
     public boolean isVisited() {
-        return visited;
+        return visitCheck;
     }
 
     public void setNotVisited() {
-        this.visited = false;
+        this.visitCheck = false;
     }
 
     public void setPreviousNodeNull() {
@@ -44,8 +44,13 @@ public class Node implements Comparable<Node> {
     }
 
     public void setVisited() {
-        this.visited = true;
+        this.visitCheck = true;
     }
+
+    public void unSetVisited() {
+        this.visitCheck = false;
+    }
+
 
     public Node getPreviousNode() {
         return previousNode;

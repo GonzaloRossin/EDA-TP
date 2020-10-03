@@ -4,7 +4,6 @@ import model.BusInPath;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class PathSolver {
     Graph graph;
@@ -15,24 +14,19 @@ public class PathSolver {
     public List<BusInPath> findPath(double fromLat, double fromLng, double toLat, double toLng) {
         graph.resetPreviousNodes();
         graph.resetMinDistanceNodes();
+        graph.resetVisitedNodes();
         BusStop origin = new BusStop("Origin", "", "", fromLat, fromLng);
         BusStop end = new BusStop("End", "", "", toLat, toLng);
         graph.addNode(origin);
         graph.addNode(end);
+        addOriginAndDestination(origin, end);
         Node nOrigin = graph.nodes.get(origin);
         Node nEnd = graph.nodes.get(end);
 
+        double checkDistance = HaversineDistance.distance(nOrigin, nEnd);
         for(Node currentNode : graph.nodes.values()) {
-            if(!currentNode.equals(nOrigin) && !currentNode.equals(nEnd)) {
-                double distanceOrigin = HaversineDistance.distance(currentNode.getLatitude(), currentNode.getLongitude(), nOrigin.getLatitude(), nOrigin.getLongitude());
-                double distanceEnd = HaversineDistance.distance(currentNode.getLatitude(), currentNode.getLongitude(), nEnd.getLatitude(), nEnd.getLongitude());
-                if (distanceOrigin <= 500) {
-                    nOrigin.addEdge(new Edge(Graph.calculateWeight(distanceOrigin, FormOfTransport.WALK), currentNode, FormOfTransport.WALK));
-                    currentNode.addEdge(new Edge(Graph.calculateWeight(distanceOrigin, FormOfTransport.WALK), nOrigin, FormOfTransport.WALK));
-                } else if (distanceEnd <= 200) {
-                    nEnd.addEdge(new Edge(Graph.calculateWeight(distanceEnd, FormOfTransport.WALK), currentNode, FormOfTransport.WALK));
-                    currentNode.addEdge(new Edge(Graph.calculateWeight(distanceEnd, FormOfTransport.WALK), nEnd, FormOfTransport.WALK));
-                }
+            if(HaversineDistance.distance(nOrigin, currentNode) <= checkDistance || HaversineDistance.distance(nEnd, currentNode) <= checkDistance) {
+                currentNode.setVisited();
             }
         }
 
@@ -45,6 +39,25 @@ public class PathSolver {
         graph.removeNode(nOrigin);
         graph.removeNode(nEnd);
         return busInPathList;
+    }
+
+
+    private void addOriginAndDestination(BusStop origin, BusStop destination) {
+        Node nOrigin = graph.nodes.get(origin);
+        Node nEnd = graph.nodes.get(destination);
+        for(Node currentNode : graph.nodes.values()) {
+            if(!currentNode.equals(nOrigin) && !currentNode.equals(nEnd)) {
+                double distanceOrigin = HaversineDistance.distance(currentNode, nOrigin);
+                double distanceEnd = HaversineDistance.distance(currentNode, nEnd);
+                if (distanceOrigin <= 500) {
+                    nOrigin.addEdge(new Edge(Graph.calculateWeight(distanceOrigin, FormOfTransport.WALK), currentNode, FormOfTransport.WALK));
+                    currentNode.addEdge(new Edge(Graph.calculateWeight(distanceOrigin, FormOfTransport.WALK), nOrigin, FormOfTransport.WALK));
+                } else if (distanceEnd <= 500) {
+                    nEnd.addEdge(new Edge(Graph.calculateWeight(distanceEnd, FormOfTransport.WALK), currentNode, FormOfTransport.WALK));
+                    currentNode.addEdge(new Edge(Graph.calculateWeight(distanceEnd, FormOfTransport.WALK), nEnd, FormOfTransport.WALK));
+                }
+            }
+        }
     }
 
 

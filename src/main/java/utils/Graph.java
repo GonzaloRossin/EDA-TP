@@ -4,7 +4,6 @@ import java.util.*;
 public class Graph {
     static final double BUS_SPEED = 16.67;
     static final double WALKING_SPEED = 1.34;
-    static final double WALKING_PENALTY = 20;
 
     public Map<BusStop, Node> nodes;
     private NodeMatrix nodeMatrix;
@@ -37,7 +36,7 @@ public class Graph {
         if(transport == FormOfTransport.LINE) {
             res = distance / BUS_SPEED;
         } else if(transport == FormOfTransport.WALK) {
-            res = (distance / WALKING_SPEED) * WALKING_PENALTY;
+            res = (distance / WALKING_SPEED);
         }
         return res;
     }
@@ -60,7 +59,6 @@ public class Graph {
         int delta = 1;
         while(connecting) {
             List<Integer> rowList = new ArrayList<>();
-
             rowList.add(delta);
             rowList.add(-delta);
             for(Integer delta_row : rowList) {
@@ -120,20 +118,22 @@ public class Graph {
 
         while (!priorityQueue.isEmpty()) {
             Node node = priorityQueue.poll();
-            for (Edge edge : node.getEdges()) {
-                Node v = edge.getTargetNode();
-                double weight = edge.getWeight();
-                double minDistance = 0;
-                if(edge.getTransport() == FormOfTransport.LINE) {
-                    minDistance = node.getMinDistance() + weight;
-                } else if(edge.getTransport() == FormOfTransport.WALK) {
-                    minDistance = (node.getMinDistance() + weight) * WALKING_PENALTY;
-                }
-                if (minDistance < v.getMinDistance()) {
-                    priorityQueue.remove(node);
-                    v.setPreviousNode(node);
-                    v.setMinDistance(minDistance);
-                    priorityQueue.add(v);
+            if (node.isVisited()) {
+                for (Edge edge : node.getEdges()) {
+                    Node v = edge.getTargetNode();
+                    double weight = edge.getWeight();
+                    double minDistance = 0;
+                    if (edge.getTransport() == FormOfTransport.LINE) {
+                        minDistance = (node.getMinDistance() + weight) * FormOfTransport.LINE.getPENALTY();
+                    } else if (edge.getTransport() == FormOfTransport.WALK) {
+                        minDistance = (node.getMinDistance() + weight) * FormOfTransport.WALK.getPENALTY();
+                    }
+                    if (minDistance < v.getMinDistance()) {
+                        priorityQueue.remove(node);
+                        v.setPreviousNode(node);
+                        v.setMinDistance(minDistance);
+                        priorityQueue.add(v);
+                    }
                 }
             }
         }
@@ -161,5 +161,7 @@ public class Graph {
 
     public void resetPreviousNodes() { nodes.values().forEach(Node::setPreviousNodeNull);}
     public void resetMinDistanceNodes() { nodes.values().forEach(Node::setMinDistanceMaxValue);}
+    public void resetVisitedNodes() { nodes.values().forEach(Node::unSetVisited);}
+
 
 }

@@ -38,7 +38,7 @@ public class BusStop {
     }
 
     public double distance(BusStop busStop) {
-        return HaversineDistance.distance(this.latitude, this.longitude, busStop.getLatitude(), busStop.getLongitude());
+        return HaversineDistance.distance(new Node(this), new Node(busStop));
     }
 
     @Override

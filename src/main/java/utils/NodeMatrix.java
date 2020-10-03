@@ -50,7 +50,6 @@ public class NodeMatrix {
     }
 
     public void insertBusStop(BusStop busStop) {
-
         int row = longitudeToRow(busStop.getLongitude());
         int col = latitudeToCol(busStop.getLatitude());
         if(matrix[row][col] == null) {

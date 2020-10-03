@@ -31,9 +31,9 @@ public class ResourceReader {
 
         List<BusStop> stops = new ArrayList<>();
         try {
-            BufferedReader buffer= new BufferedReader(new FileReader(Path));
+            BufferedReader buffer = new BufferedReader(new FileReader(Path));
             buffer.readLine();
-            List<PlaceLocation> sites=new ArrayList<>();
+            List<PlaceLocation> sites = new ArrayList<>();
             while((line=buffer.readLine())!=null){
                 String[] value=line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
                 stops.add(new BusStop(value[8], value[2], value[10], Double.parseDouble(value[3]), Double.parseDouble(value[4])));
