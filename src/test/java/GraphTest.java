@@ -3,19 +3,7 @@ import utils.BusStop;
 import utils.Graph;
 
 public class GraphTest {
-    @Test
-    void testBfs() {
-        Graph graph = TestGraphFactory.undirectedUnweightedGraph();
-        BusStop _26A = new BusStop( "22A", "1520 DEFENSA", "Retiro - Cno. Centenario y Lavalleja",-34.625663, -58.371042);
-        graph.printBfs(_26A);
-    }
 
-    @Test
-    void testDfs() {
-        Graph graph = TestGraphFactory.undirectedUnweightedGraph();
-        BusStop _26A = new BusStop( "22A", "1520 DEFENSA", "Retiro - Cno. Centenario y Lavalleja",-34.625663, -58.371042);
-        graph.printDfs(_26A);
-    }
     @Test
     void testDijkstra() {
         Graph graph = TestGraphFactory.directedUnweightedGraph();

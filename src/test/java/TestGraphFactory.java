@@ -4,7 +4,7 @@ import utils.Graph;
 public class TestGraphFactory {
 
     public static Graph undirectedUnweightedGraph() {
-        Graph graph = new Graph( false);
+        Graph graph = new Graph( );
         BusStop _26A = new BusStop( "22A", "1520 DEFENSA", "Retiro - Cno. Centenario y Lavalleja",-34.625663, -58.371042);
         BusStop _26B = new BusStop( "22A", "722 REGIMIENTO DE PATRICIOS AV.","Retiro - Cno. Centenario y Lavalleja",-34.636743, -58.369765);
         BusStop _26C = new BusStop( "22A", "324 REGIMIENTO DE PATRICIOS AV.","Retiro - Cno. Centenario y Lavalleja",-34.632942, -58.370332);
@@ -26,7 +26,7 @@ public class TestGraphFactory {
     }
 
     public static Graph directedUnweightedGraph() {
-        Graph graph = new Graph( true);
+        Graph graph = new Graph();
         BusStop _26A = new BusStop( "22A", "1520 DEFENSA", "Retiro - Cno. Centenario y Lavalleja",-34.625663, -58.371042);
         BusStop _26B = new BusStop( "22A", "722 REGIMIENTO DE PATRICIOS AV.","Retiro - Cno. Centenario y Lavalleja",-34.636743, -58.369765);
         BusStop _26C = new BusStop( "22A", "324 REGIMIENTO DE PATRICIOS AV.","Retiro - Cno. Centenario y Lavalleja",-34.632942, -58.370332);

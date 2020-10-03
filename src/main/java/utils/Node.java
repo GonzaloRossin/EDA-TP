@@ -1,10 +1,9 @@
 package utils;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Node implements Comparable<Node> {
-    private List<Edge> edges;
+    private Set<Edge> edges;
     private boolean visited;
     private Node previousNode;
     private double minDistance = Double.MAX_VALUE;
@@ -13,18 +12,18 @@ public class Node implements Comparable<Node> {
 
     public Node(BusStop busStop) {
         this.busInfo = busStop;
-        this.edges = new ArrayList<>();
+        this.edges = new HashSet<>();
     }
 
     public void addEdge(Edge edge) {
         this.edges.add(edge);
     }
 
-    public List<Edge> getEdges() {
+    public Set<Edge> getEdges() {
         return edges;
     }
 
-    public void setEdges(List<Edge> edges) {
+    public void setEdges(Set<Edge> edges) {
         this.edges = edges;
     }
 
@@ -34,6 +33,14 @@ public class Node implements Comparable<Node> {
 
     public void setNotVisited() {
         this.visited = false;
+    }
+
+    public void setPreviousNodeNull() {
+        this.previousNode = null;
+    }
+
+    public void setMinDistanceMaxValue() {
+        this.minDistance = Double.MAX_VALUE;
     }
 
     public void setVisited() {
@@ -52,9 +59,17 @@ public class Node implements Comparable<Node> {
         return minDistance;
     }
 
+    public BusStop getBusInfo() {
+        return busInfo;
+    }
 
-    public double getLatitude(){return this.busInfo.getLatitude();}
-    public double getLongitude(){return this.busInfo.getLongitude();}
+    public double getLatitude() {
+        return this.busInfo.getLatitude();
+    }
+
+    public double getLongitude() {
+        return this.busInfo.getLongitude();
+    }
 
     public String getRouteName() {
         return this.busInfo.getRoute();
@@ -64,6 +79,13 @@ public class Node implements Comparable<Node> {
         this.minDistance = minDistance;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Node node = (Node) o;
+        return Objects.equals(busInfo, node.busInfo);
+    }
 
     @Override
     public String toString() {

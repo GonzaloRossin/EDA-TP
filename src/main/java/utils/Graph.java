@@ -2,100 +2,115 @@ package utils;
 import java.util.*;
 
 public class Graph {
-    private final boolean isDirected;
+    static final double BUS_SPEED = 16.67;
+    static final double WALKING_SPEED = 1.34;
+    static final double WALKING_PENALTY = 20;
+
     public Map<BusStop, Node> nodes;
-    final double BUS_SPEED = 16.67;
-    final double WALKING_SPEED = 1.34;
-    final double WALKING_PENALTY = 2;
-    public Graph(boolean isDirected) {
-        this.isDirected = isDirected;
+    private NodeMatrix nodeMatrix;
+
+    public Graph() {
         nodes = new HashMap<>();
     }
 
     public Graph(List<BusStop> busStops) {
-        this.isDirected = true;
+        nodeMatrix = new NodeMatrix(busStops);
         this.nodes = new HashMap<>();
         for(BusStop busStop : busStops) {
             addNode(busStop);
         }
     }
-    public void solveEdges(){
-        for(Node currentNode: nodes.values()){
-            for(Node targetNode : nodes.values()){
-                if(!currentNode.equals(targetNode)){
-                    double distance = HaversineDistance.distance(currentNode.getLatitude(), currentNode.getLongitude(), targetNode.getLatitude(), targetNode.getLongitude());
-                    if(currentNode.getRouteName().equals(targetNode.getRouteName()) && distance <= 250) {
-                        currentNode.addEdge(new Edge(calculateWeight(distance, FormOfTransport.LINEA), currentNode, targetNode, FormOfTransport.LINEA));
-                    }
-                    else if(!currentNode.getRouteName().equals(targetNode.getRouteName()) && distance <= 150){
-                        currentNode.addEdge(new Edge(calculateWeight(distance, FormOfTransport.CAMINATA), currentNode, targetNode, FormOfTransport.CAMINATA));
-                    }
-                }
+
+    public void makeEdges(){
+        NodeSet[][] nodeSetMatrix = nodeMatrix.getMatrix();
+        int matrixSize = nodeSetMatrix.length;
+        for(int row = 0; row < matrixSize; row++) {
+            for(int col = 0; col < matrixSize; col++) {
+                if(nodeSetMatrix[row][col] == null) continue;
+                connectNodes(row, col);
             }
         }
     }
 
-    private double calculateWeight(double distance, FormOfTransport transport) {
+    public static double calculateWeight(double distance, FormOfTransport transport) {
         double res = 0;
-        if(transport == FormOfTransport.LINEA) {
+        if(transport == FormOfTransport.LINE) {
             res = distance / BUS_SPEED;
-        } else if(transport == FormOfTransport.CAMINATA) {
+        } else if(transport == FormOfTransport.WALK) {
             res = (distance / WALKING_SPEED) * WALKING_PENALTY;
         }
         return res;
     }
 
     public void addNode(BusStop stop) {
+        nodeMatrix.insertBusStop(stop);
         nodes.putIfAbsent(stop, new Node(stop));
     }
 
-    public void addEdge(Node fromNode,Node toNode, double weight, FormOfTransport type) {
+    public void addEdge(Node fromNode, Node toNode, double weight, FormOfTransport transport) {
         if (fromNode == null || toNode == null) return;
-        fromNode.getEdges().add(new Edge(weight, fromNode, toNode,type));
-        if (!isDirected) {
-            toNode.getEdges().add(new Edge(weight, toNode, fromNode,type));
-        }
+        fromNode.getEdges().add(new Edge(weight, toNode, transport));
     }
 
-    public void printBfs(BusStop startingBus) {
-        resetAllNodes();
+    private void connectNodes(int row, int col) {
+        NodeSet[][] nodeSet = nodeMatrix.getMatrix();
+        connectSets(nodeSet[row][col], nodeSet[row][col]);
+        boolean connecting = true;
 
-        Queue<Node> nodesToVisit = new LinkedList<>();
-        nodesToVisit.add(nodes.get(startingBus));
+        int delta = 1;
+        while(connecting) {
+            List<Integer> rowList = new ArrayList<>();
 
-        while (!nodesToVisit.isEmpty()) {
-            Node current = nodesToVisit.remove();
-            if (!current.isVisited()) {
-                current.setVisited();
-                System.out.println(current.getRouteName());
-                for (Edge edge : current.getEdges()) {
-                    Node edgeNode = edge.getTargetNode();
-                    if (!edgeNode.isVisited()) {
-                        nodesToVisit.add(edgeNode);
+            rowList.add(delta);
+            rowList.add(-delta);
+            for(Integer delta_row : rowList) {
+                if(row + delta_row >= 0 && row + delta_row < 100) {
+                    for(int i = -delta; i < delta + 1; i++) {
+                        if(col + i >= 0 && col + i < 100 && nodeSet[row+delta_row][col+i] != null) {
+                            connecting = connectSets(nodeSet[row][col], nodeSet[row + delta_row][col + i]);
+                        }
                     }
                 }
             }
+
+            List<Integer> colList = new ArrayList<>();
+            colList.add(-delta);
+            colList.add(delta);
+            for(Integer delta_col : colList) {
+                if(col + delta_col >= 0 && col + delta_col < 100) {
+                    for(int i = -delta; i < delta + 1; i++) {
+                        if(row + i >= 0 && row + i < 100 && nodeSet[row+i][col+delta_col] != null) {
+                            connecting = connectSets(nodeSet[row][col], nodeSet[row+i][col+delta_col]);
+                        }
+                    }
+                }
+            }
+
+            if(row - delta < 0 && row + delta > 100 && col - delta < 0 && col + delta > 100) break;
+            delta += 1;
         }
     }
 
-    public void printDfs(BusStop startingBus) {
-        resetAllNodes();
-        printDfsRec(nodes.get(startingBus));
-    }
-
-    private void printDfsRec(Node node) {
-        if (node.isVisited()) {
-            return;
-        }
-        node.setVisited();
-        System.out.println(node.getRouteName());
-
-        for (Edge edge : node.getEdges()) {
-            Node edgeNode = edge.getTargetNode();
-            if (!edgeNode.isVisited()) {
-                printDfsRec(edgeNode);
+    private boolean connectSets(NodeSet origin, NodeSet target) {
+        boolean isConnected = false;
+        Set<Node> originSet = origin.getNodeSet();
+        Set<Node> targetSet = target.getNodeSet();
+        for (Node currentNode : originSet) {
+            BusStop currentStop = currentNode.getBusInfo();
+            for(Node targetNode : targetSet) {
+                if(currentNode.equals(targetNode)) continue;
+                BusStop targetStop = targetNode.getBusInfo();
+                double distance = currentStop.distance(targetStop);
+                if(currentStop.getRoute().equals(targetStop.getRoute()) && currentStop.distance(targetStop) <= 500) {
+                    nodes.get(currentStop).addEdge(new Edge(calculateWeight(distance, FormOfTransport.LINE), nodes.get(targetStop), FormOfTransport.LINE));
+                    isConnected = true;
+                } else if(currentStop.distance(targetStop) <= 350) {
+                    nodes.get(currentStop).addEdge(new Edge(calculateWeight(distance, FormOfTransport.WALK), nodes.get(targetStop), FormOfTransport.WALK));
+                    isConnected = true;
+                }
             }
         }
+        return isConnected;
     }
 
     public void computePath(Node sourceNode) {
@@ -108,8 +123,12 @@ public class Graph {
             for (Edge edge : node.getEdges()) {
                 Node v = edge.getTargetNode();
                 double weight = edge.getWeight();
-                double minDistance = node.getMinDistance() + weight;
-
+                double minDistance = 0;
+                if(edge.getTransport() == FormOfTransport.LINE) {
+                    minDistance = node.getMinDistance() + weight;
+                } else if(edge.getTransport() == FormOfTransport.WALK) {
+                    minDistance = (node.getMinDistance() + weight) * WALKING_PENALTY;
+                }
                 if (minDistance < v.getMinDistance()) {
                     priorityQueue.remove(node);
                     v.setPreviousNode(node);
@@ -118,6 +137,15 @@ public class Graph {
                 }
             }
         }
+    }
+
+    public void removeNode(Node node) {
+        Set<Edge> edges = node.getEdges();
+        for(Edge edge : edges) {
+            Node targetNode = edge.getTargetNode();
+            targetNode.getEdges().remove(new Edge(edge.getWeight(), node, edge.getTransport()));
+        }
+        nodes.remove(node.getBusInfo());
     }
 
     public List<Node> getShortestPathTo(Node targetNode) {
@@ -131,5 +159,7 @@ public class Graph {
         return path;
     }
 
-    private void resetAllNodes() { nodes.values().forEach(Node::setNotVisited);}
+    public void resetPreviousNodes() { nodes.values().forEach(Node::setPreviousNodeNull);}
+    public void resetMinDistanceNodes() { nodes.values().forEach(Node::setMinDistanceMaxValue);}
+
 }

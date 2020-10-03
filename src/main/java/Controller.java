@@ -2,21 +2,25 @@ import model.BusInPath;
 import model.PlaceLocation;
 import utils.BusStop;
 import utils.Graph;
+import utils.PathSolver;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class Controller {
+
+    PathSolver pathSolver;
 
   public Controller() {
       List<BusStop> busStops = ResourceReader.getBusStops();
       Graph graph = new Graph(busStops);
-      graph.solveEdges();
-      System.out.println("Done");
+      graph.makeEdges();
+      this.pathSolver = new PathSolver(graph);
   }
 
   public List<BusInPath> findPath(double fromLat, double fromLng, double toLat, double toLng) {
-    return Arrays.asList(new BusInPath("No implementado", 0, 0, 0, 0));
+    return pathSolver.findPath(fromLat, fromLng, toLat, toLng);
   }
 
   public List<PlaceLocation> findPlaces(String searchTerm) {

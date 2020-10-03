@@ -37,6 +37,10 @@ public class BusStop {
         return route;
     }
 
+    public double distance(BusStop busStop) {
+        return HaversineDistance.distance(this.latitude, this.longitude, busStop.getLatitude(), busStop.getLongitude());
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -1,7 +1,7 @@
 package utils;
 
 public enum FormOfTransport {
-    CAMINATA,
-    LINEA,SUBTE
+    WALK,
+    LINE,SUBWAY
 
 }
