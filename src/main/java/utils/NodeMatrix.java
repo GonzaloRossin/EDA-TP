@@ -1,25 +1,24 @@
 package utils;
 
 import java.util.List;
-import java.util.Set;
 
 public class NodeMatrix {
     final int ROW = 100;
     final int COL = 100;
     double minLat = 0 , minLon = 0 , maxLat = 0 , maxLon = 0 ;
     private NodeSet[][] matrix;
-    public NodeMatrix(List<BusStop> busStopList) {
+    public NodeMatrix(List<Stop> busStopList) {
         matrix = new NodeSet[ROW][COL];
         getMaxMinData(busStopList);
     }
 
-    private void getMaxMinData(List<BusStop> busStops) {
-        BusStop aux = busStops.get(0);
+    private void getMaxMinData(List<Stop> busStops) {
+        Stop aux = busStops.get(0);
         minLat = maxLat = aux.getLatitude();
         minLon = maxLon = aux.getLongitude();
-        for(BusStop busStop : busStops) {
-            double busLat = busStop.getLatitude();
-            double busLon = busStop.getLongitude();
+        for(Stop stop : busStops) {
+            double busLat = stop.getLatitude();
+            double busLon = stop.getLongitude();
             if(busLat >= maxLat) maxLat = busLat;
             if(busLat <= minLat) minLat = busLat;
             if(busLon >= maxLon) maxLon = busLon;
@@ -49,13 +48,13 @@ public class NodeMatrix {
         return r == 100 ? 99 : r;
     }
 
-    public void insertBusStop(BusStop busStop) {
-        int row = longitudeToRow(busStop.getLongitude());
-        int col = latitudeToCol(busStop.getLatitude());
+    public void insertBusStop(Stop stop) {
+        int row = longitudeToRow(stop.getLongitude());
+        int col = latitudeToCol(stop.getLatitude());
         if(matrix[row][col] == null) {
             matrix[row][col] = new NodeSet();
         }
-        matrix[row][col].getNodeSet().add(new Node(busStop));
+        matrix[row][col].getNodeSet().add(new Node(stop));
     }
 
 

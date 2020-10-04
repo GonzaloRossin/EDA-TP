@@ -3,8 +3,7 @@ package utils;
 public class HaversineDistance {
     private static final int EARTH_RADIUS = 6371000; //RADIO en METROS
 
-    public static double distance(Node start,
-                                  Node end) {
+    public static double distance(Node start, Node end) {
 
         double dLat  = Math.toRadians((end.getLatitude() - start.getLatitude()));
         double dLong = Math.toRadians((end.getLongitude() - start.getLongitude()));

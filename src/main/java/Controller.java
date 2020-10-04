@@ -1,20 +1,19 @@
 import model.BusInPath;
 import model.PlaceLocation;
-import utils.BusStop;
 import utils.Graph;
 import utils.PathSolver;
+import utils.Stop;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class Controller {
 
     PathSolver pathSolver;
 
   public Controller() {
-      List<BusStop> busStops = ResourceReader.getBusStops();
-      Graph graph = new Graph(busStops);
+      List<Stop> stops = ResourceReader.getStops();
+      Graph graph = new Graph(stops);
       graph.makeEdges();
       this.pathSolver = new PathSolver(graph);
   }

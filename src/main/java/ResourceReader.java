@@ -1,6 +1,7 @@
 import model.PlaceLocation;
-import utils.BusStop;
 import utils.QGrams;
+import utils.Stop;
+import utils.StopType;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -10,7 +11,7 @@ import java.util.*;
 public class ResourceReader {
     private static List<PlaceLocation> getSites(){
 
-        String Path="G:\\EDA\\EDA-TP\\src\\main\\resources\\espacios-culturales.csv";
+        String Path="C:\\Users\\gonza\\Downloads\\TP EDA - Base\\src\\main\\resources\\espacios-culturales.csv";
         String line;
         List<PlaceLocation> sites=new ArrayList<>();
         try {
@@ -25,18 +26,29 @@ public class ResourceReader {
         }
         return sites;
     }
-    public static List<BusStop> getBusStops() {
-        String Path="G:\\EDA\\EDA-TP\\src\\main\\resources\\paradas-de-colectivo.csv";
+    public static List<Stop> getStops() {
+        String Path="C:\\Users\\gonza\\Downloads\\TP EDA - Base\\src\\main\\resources\\paradas-de-colectivo.csv";
         String line;
 
-        List<BusStop> stops = new ArrayList<>();
+        List<Stop> stops = new ArrayList<>();
         try {
             BufferedReader buffer = new BufferedReader(new FileReader(Path));
             buffer.readLine();
             List<PlaceLocation> sites = new ArrayList<>();
             while((line=buffer.readLine())!=null){
                 String[] value=line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
-                stops.add(new BusStop(value[8], value[2], value[10], Double.parseDouble(value[3]), Double.parseDouble(value[4])));
+                stops.add(new Stop(value[8], value[2], Double.parseDouble(value[3]), Double.parseDouble(value[4]), StopType.LINE));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Path="C:\\Users\\gonza\\Downloads\\TP EDA - Base\\src\\main\\resources\\estaciones-accesibles.csv";
+        try {//Se cargan paradas de subte
+            BufferedReader buffer = new BufferedReader(new FileReader(Path));
+            buffer.readLine();
+            while((line=buffer.readLine())!=null){
+                String[] value=line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
+                stops.add(new Stop(value[2], value[3], Double.parseDouble(value[1]), Double.parseDouble(value[0]), StopType.SUBWAY));
             }
         } catch (Exception e) {
             e.printStackTrace();

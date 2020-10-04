@@ -2,19 +2,19 @@ package utils;
 
 import java.util.Objects;
 
-public class BusStop {
+public class Stop {
     private String route;
-    private String branch;
     private Double latitude;
     private Double longitude;
     private String stopName;
+    StopType stopType;
 
-    public BusStop(String route, String stopName, String branch, Double latitude, Double longitude) {
+    public Stop(String route, String stopName, Double latitude, Double longitude,StopType stopType) {
         this.route = route;
-        this.branch = branch;
         this.latitude = latitude;
         this.longitude = longitude;
         this.stopName = stopName;
+        this.stopType=stopType;
     }
 
     public String getStopName() {
@@ -29,15 +29,11 @@ public class BusStop {
         return longitude;
     }
 
-    public String getBranch() {
-        return branch;
-    }
-
     public String getRoute() {
         return route;
     }
 
-    public double distance(BusStop busStop) {
+    public double distance(Stop busStop) {
         return HaversineDistance.distance(new Node(this), new Node(busStop));
     }
 
@@ -45,9 +41,8 @@ public class BusStop {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        BusStop busStop = (BusStop) o;
+        Stop busStop = (Stop) o;
         return  Objects.equals(route, busStop.route) &&
-                Objects.equals(branch, busStop.branch) &&
                 Objects.equals(latitude, busStop.latitude) &&
                 Objects.equals(longitude, busStop.longitude) &&
                 Objects.equals(stopName, busStop.stopName);
@@ -55,11 +50,11 @@ public class BusStop {
 
     @Override
     public int hashCode() {
-        return Objects.hash(route, branch, latitude, longitude, stopName);
+        return Objects.hash(route, latitude, longitude, stopName);
     }
 
     @Override
     public String toString() {
-        return " Route: " + getRoute() + " Branch: " + getBranch() + " Lat: " + getLatitude() + " Long: " + getLongitude();
+        return " Route: " + getRoute() + " Lat: " + getLatitude() + " Long: " + getLongitude();
     }
 }

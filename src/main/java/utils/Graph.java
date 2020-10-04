@@ -5,18 +5,18 @@ public class Graph {
     static final double BUS_SPEED = 16.67;
     static final double WALKING_SPEED = 1.34;
 
-    public Map<BusStop, Node> nodes;
+    public Map<Stop, Node> nodes;
     private NodeMatrix nodeMatrix;
 
     public Graph() {
         nodes = new HashMap<>();
     }
 
-    public Graph(List<BusStop> busStops) {
-        nodeMatrix = new NodeMatrix(busStops);
+    public Graph(List<Stop> Stops) {
+        nodeMatrix = new NodeMatrix(Stops);
         this.nodes = new HashMap<>();
-        for(BusStop busStop : busStops) {
-            addNode(busStop);
+        for(Stop stop : Stops) {
+            addNode(stop);
         }
     }
 
@@ -41,7 +41,7 @@ public class Graph {
         return res;
     }
 
-    public void addNode(BusStop stop) {
+    public void addNode(Stop stop) {
         nodeMatrix.insertBusStop(stop);
         nodes.putIfAbsent(stop, new Node(stop));
     }
@@ -94,10 +94,10 @@ public class Graph {
         Set<Node> originSet = origin.getNodeSet();
         Set<Node> targetSet = target.getNodeSet();
         for (Node currentNode : originSet) {
-            BusStop currentStop = currentNode.getBusInfo();
+            Stop currentStop = currentNode.getStopInfo();
             for(Node targetNode : targetSet) {
                 if(currentNode.equals(targetNode)) continue;
-                BusStop targetStop = targetNode.getBusInfo();
+                Stop targetStop = targetNode.getStopInfo();
                 double distance = currentStop.distance(targetStop);
                 if(currentStop.getRoute().equals(targetStop.getRoute()) && currentStop.distance(targetStop) <= 500) {
                     nodes.get(currentStop).addEdge(new Edge(calculateWeight(distance, FormOfTransport.LINE), nodes.get(targetStop), FormOfTransport.LINE));
@@ -145,7 +145,7 @@ public class Graph {
             Node targetNode = edge.getTargetNode();
             targetNode.getEdges().remove(new Edge(edge.getWeight(), node, edge.getTransport()));
         }
-        nodes.remove(node.getBusInfo());
+        nodes.remove(node.getStopInfo());
     }
 
     public List<Node> getShortestPathTo(Node targetNode) {

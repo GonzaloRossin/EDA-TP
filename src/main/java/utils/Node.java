@@ -7,11 +7,11 @@ public class Node implements Comparable<Node> {
     private boolean visitCheck;
     private Node previousNode;
     private double minDistance = Double.MAX_VALUE;
-    private BusStop busInfo;
+    private Stop stopInfo;
 
 
-    public Node(BusStop busStop) {
-        this.busInfo = busStop;
+    public Node(Stop stop) {
+        this.stopInfo = stop;
         this.edges = new HashSet<>();
     }
 
@@ -64,20 +64,20 @@ public class Node implements Comparable<Node> {
         return minDistance;
     }
 
-    public BusStop getBusInfo() {
-        return busInfo;
+    public Stop getStopInfo() {
+        return stopInfo;
     }
 
     public double getLatitude() {
-        return this.busInfo.getLatitude();
+        return this.stopInfo.getLatitude();
     }
 
     public double getLongitude() {
-        return this.busInfo.getLongitude();
+        return this.stopInfo.getLongitude();
     }
 
     public String getRouteName() {
-        return this.busInfo.getRoute();
+        return this.stopInfo.getRoute();
     }
 
     public void setMinDistance(double minDistance) {
@@ -89,12 +89,12 @@ public class Node implements Comparable<Node> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Node node = (Node) o;
-        return Objects.equals(busInfo, node.busInfo);
+        return Objects.equals(stopInfo, node.stopInfo);
     }
 
     @Override
     public String toString() {
-        return this.busInfo.toString();
+        return this.stopInfo.toString();
     }
 
     @Override

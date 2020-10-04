@@ -15,8 +15,8 @@ public class PathSolver {
         graph.resetPreviousNodes();
         graph.resetMinDistanceNodes();
         graph.resetVisitedNodes();
-        BusStop origin = new BusStop("Origin", "", "", fromLat, fromLng);
-        BusStop end = new BusStop("End", "", "", toLat, toLng);
+        Stop origin = new Stop("Origin", "", fromLat, fromLng,StopType.NONE);
+        Stop end = new Stop("End", "", toLat, toLng,StopType.NONE);
         graph.addNode(origin);
         graph.addNode(end);
         addOriginAndDestination(origin, end);
@@ -42,7 +42,7 @@ public class PathSolver {
     }
 
 
-    private void addOriginAndDestination(BusStop origin, BusStop destination) {
+    private void addOriginAndDestination(Stop origin, Stop destination) {
         Node nOrigin = graph.nodes.get(origin);
         Node nEnd = graph.nodes.get(destination);
         for(Node currentNode : graph.nodes.values()) {
