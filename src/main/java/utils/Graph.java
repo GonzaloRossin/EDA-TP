@@ -99,7 +99,7 @@ public class Graph {
                 if(currentNode.equals(targetNode)) continue;
                 Stop targetStop = targetNode.getStopInfo();
                 double distance = currentStop.distance(targetStop);
-                if(currentStop.getRoute().equals(targetStop.getRoute()) && currentStop.distance(targetStop) <= 500) {
+                if(currentStop.getRoute().equals(targetStop.getRoute()) && currentStop.distance(targetStop) <= 1000) {
                     nodes.get(currentStop).addEdge(new Edge(calculateWeight(distance, FormOfTransport.LINE), nodes.get(targetStop), FormOfTransport.LINE));
                     isConnected = true;
                 } else if(currentStop.distance(targetStop) <= 350) {

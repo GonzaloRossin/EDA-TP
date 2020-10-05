@@ -1,7 +1,7 @@
 package utils;
 
 public enum FormOfTransport {
-    WALK(30),
+    WALK(10),
     LINE(1),
     SUBWAY(2);
 
