@@ -3,6 +3,7 @@ import java.util.*;
 
 public class Graph {
     static final double BUS_SPEED = 16.67;
+    static final double FIXED_TRANSPORT_PENALTY=calculateWeight(250,FormOfTransport.WALK);
     static final double WALKING_SPEED = 1.34;
 
     public Map<Stop, Node> nodes;
@@ -99,11 +100,11 @@ public class Graph {
                 if(currentNode.equals(targetNode)) continue;
                 Stop targetStop = targetNode.getStopInfo();
                 double distance = currentStop.distance(targetStop);
-                if(currentStop.getRoute().equals(targetStop.getRoute()) && currentStop.distance(targetStop) <= 1000) {
+                if(currentStop.getRoute().equals(targetStop.getRoute())) {
                     nodes.get(currentStop).addEdge(new Edge(calculateWeight(distance, FormOfTransport.LINE), nodes.get(targetStop), FormOfTransport.LINE));
                     isConnected = true;
                 } else if(currentStop.distance(targetStop) <= 350) {
-                    nodes.get(currentStop).addEdge(new Edge(calculateWeight(distance, FormOfTransport.WALK), nodes.get(targetStop), FormOfTransport.WALK));
+                    nodes.get(currentStop).addEdge(new Edge(calculateWeight(distance, FormOfTransport.WALK)+FIXED_TRANSPORT_PENALTY, nodes.get(targetStop), FormOfTransport.WALK));
                     isConnected = true;
                 }
             }
