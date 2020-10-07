@@ -32,13 +32,8 @@ public class PathSolver {
 
         graph.computePath(nOrigin);
         List<Node> path = graph.getShortestPathTo(nEnd);
-        if(path.size() == 2) {
-            path.remove(0);
-            path.get(0).getStopInfo().setRoute("Caminable");
-        } else {
-            path.remove(0);
-            path.remove(path.size() - 1);
-        }
+        path.remove(0);
+        path.remove(path.size() - 1);
         List<BusInPath> busInPathList = fillBusInPath(path);
 
         graph.removeNode(nOrigin);
@@ -63,8 +58,6 @@ public class PathSolver {
                 }
             }
         }
-        nOrigin.addEdge(new Edge(Graph.calculateWeight(HaversineDistance.distance(nOrigin, nEnd), FormOfTransport.WALK), nEnd, FormOfTransport.WALK));
-        nEnd.addEdge(new Edge(Graph.calculateWeight(HaversineDistance.distance(nOrigin, nEnd), FormOfTransport.WALK), nOrigin, FormOfTransport.WALK));
     }
 
 

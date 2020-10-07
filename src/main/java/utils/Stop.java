@@ -17,10 +17,6 @@ public class Stop {
         this.stopType=stopType;
     }
 
-    public void setRoute(String route) {
-        this.route = route;
-    }
-
     public String getStopName() {
         return stopName;
     }
