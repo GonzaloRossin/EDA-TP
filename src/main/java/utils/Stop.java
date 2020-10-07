@@ -33,6 +33,8 @@ public class Stop {
         return route;
     }
 
+    public void setRoute(String route) { this.route = route; }
+
     public double distance(Stop busStop) {
         return HaversineDistance.distance(new Node(this), new Node(busStop));
     }

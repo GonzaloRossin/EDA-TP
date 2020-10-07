@@ -32,8 +32,12 @@ public class PathSolver {
 
         graph.computePath(nOrigin);
         List<Node> path = graph.getShortestPathTo(nEnd);
-        path.remove(0);
-        path.remove(path.size() - 1);
+        if(path.size()!=1) {
+            path.remove(0);
+            path.remove(path.size() - 1);
+        }else{
+            path.get(0).getStopInfo().setRoute("Caminable");
+        }
         List<BusInPath> busInPathList = fillBusInPath(path);
 
         graph.removeNode(nOrigin);
@@ -43,16 +47,18 @@ public class PathSolver {
 
 
     private void addOriginAndDestination(Stop origin, Stop destination) {
+        final int START_RADIUS=1000;
+        final int END_RADIUS=500;
         Node nOrigin = graph.nodes.get(origin);
         Node nEnd = graph.nodes.get(destination);
         for(Node currentNode : graph.nodes.values()) {
             if(!currentNode.equals(nOrigin) && !currentNode.equals(nEnd)) {
                 double distanceOrigin = HaversineDistance.distance(currentNode, nOrigin);
                 double distanceEnd = HaversineDistance.distance(currentNode, nEnd);
-                if (distanceOrigin <= 500) {
+                if (distanceOrigin <= START_RADIUS) {
                     nOrigin.addEdge(new Edge(Graph.calculateWeight(distanceOrigin, FormOfTransport.WALK), currentNode, FormOfTransport.WALK));
                     currentNode.addEdge(new Edge(Graph.calculateWeight(distanceOrigin, FormOfTransport.WALK), nOrigin, FormOfTransport.WALK));
-                } else if (distanceEnd <= 500) {
+                } else if (distanceEnd <= END_RADIUS) {
                     nEnd.addEdge(new Edge(Graph.calculateWeight(distanceEnd, FormOfTransport.WALK), currentNode, FormOfTransport.WALK));
                     currentNode.addEdge(new Edge(Graph.calculateWeight(distanceEnd, FormOfTransport.WALK), nEnd, FormOfTransport.WALK));
                 }
