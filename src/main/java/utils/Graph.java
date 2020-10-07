@@ -3,7 +3,9 @@ import java.util.*;
 
 public class Graph {
     static final double BUS_SPEED = 16.67;
-    static final double FIXED_TRANSPORT_PENALTY=calculateWeight(250,FormOfTransport.WALK);
+    static final double SUBWAY_SPEED=12.5;
+    static final double FIXED_BUS_PENALTY=calculateWeight(250,FormOfTransport.WALK);
+    static final double FIXED_SUBWAY_PENALTY=calculateWeight(20,FormOfTransport.WALK);
     static final double WALKING_SPEED = 1.34;
 
     public Map<Stop, Node> nodes;
@@ -38,7 +40,8 @@ public class Graph {
             res = distance / BUS_SPEED;
         } else if(transport == FormOfTransport.WALK) {
             res = (distance / WALKING_SPEED);
-        }
+        }else
+            res=(distance/SUBWAY_SPEED);
         return res;
     }
 
@@ -100,11 +103,20 @@ public class Graph {
                 if(currentNode.equals(targetNode)) continue;
                 Stop targetStop = targetNode.getStopInfo();
                 double distance = currentStop.distance(targetStop);
-                if(currentStop.getRoute().equals(targetStop.getRoute())) {
-                    nodes.get(currentStop).addEdge(new Edge(calculateWeight(distance, FormOfTransport.LINE), nodes.get(targetStop), FormOfTransport.LINE));
-                    isConnected = true;
+                if(currentStop.stopType==targetStop.stopType && currentStop.getRoute().equals(targetStop.getRoute())){
+                    if(currentStop.stopType==StopType.LINE){
+                        nodes.get(currentStop).addEdge(new Edge(calculateWeight(distance, FormOfTransport.LINE), nodes.get(targetStop), FormOfTransport.LINE));
+                        isConnected = true;
+                    }
+                    else{
+                        nodes.get(currentStop).addEdge(new Edge(calculateWeight(distance, FormOfTransport.SUBWAY), nodes.get(targetStop), FormOfTransport.SUBWAY));
+                        isConnected = true;
+                    }
                 } else if(currentStop.distance(targetStop) <= 350) {
-                    nodes.get(currentStop).addEdge(new Edge(calculateWeight(distance, FormOfTransport.WALK)+FIXED_TRANSPORT_PENALTY, nodes.get(targetStop), FormOfTransport.WALK));
+                    if(currentStop.stopType==StopType.SUBWAY)
+                        nodes.get(currentStop).addEdge(new Edge(calculateWeight(distance, FormOfTransport.WALK)+FIXED_SUBWAY_PENALTY, nodes.get(targetStop), FormOfTransport.WALK));
+                    else
+                        nodes.get(currentStop).addEdge(new Edge(calculateWeight(distance, FormOfTransport.WALK)+FIXED_BUS_PENALTY, nodes.get(targetStop), FormOfTransport.WALK));
                     isConnected = true;
                 }
             }
@@ -128,6 +140,8 @@ public class Graph {
                         minDistance = (node.getMinDistance() + weight) * FormOfTransport.LINE.getPENALTY();
                     } else if (edge.getTransport() == FormOfTransport.WALK) {
                         minDistance = (node.getMinDistance() + weight) * FormOfTransport.WALK.getPENALTY();
+                    } else if(edge.getTransport()==FormOfTransport.SUBWAY){
+                        minDistance=(node.getMinDistance()+weight)*FormOfTransport.SUBWAY.getPENALTY();
                     }
                     if (minDistance < v.getMinDistance()) {
                         priorityQueue.remove(node);
