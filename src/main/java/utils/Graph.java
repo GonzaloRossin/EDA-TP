@@ -113,7 +113,7 @@ public class Graph {
                         isConnected = true;
                     }
                 } else if(currentStop.distance(targetStop) <= 350) {
-                    if(currentStop.stopType==StopType.SUBWAY)
+                    if(currentStop.stopType==StopType.SUBWAY && targetStop.stopType==StopType.SUBWAY)
                         nodes.get(currentStop).addEdge(new Edge(calculateWeight(distance, FormOfTransport.WALK)+FIXED_SUBWAY_PENALTY, nodes.get(targetStop), FormOfTransport.WALK));
                     else
                         nodes.get(currentStop).addEdge(new Edge(calculateWeight(distance, FormOfTransport.WALK)+FIXED_BUS_PENALTY, nodes.get(targetStop), FormOfTransport.WALK));

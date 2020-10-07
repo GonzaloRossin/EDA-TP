@@ -42,13 +42,13 @@ public class ResourceReader {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Path="C:\\Users\\gonza\\Downloads\\TP EDA - Base\\src\\main\\resources\\estaciones-accesibles.csv";
+        Path="C:\\Users\\gonza\\Downloads\\TP EDA - Base\\src\\main\\resources\\estaciones-de-subte.csv";
         try {//Se cargan paradas de subte
             BufferedReader buffer = new BufferedReader(new FileReader(Path));
             buffer.readLine();
             while((line=buffer.readLine())!=null){
                 String[] value=line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
-                stops.add(new Stop(value[2], value[3], Double.parseDouble(value[1]), Double.parseDouble(value[0]), StopType.SUBWAY));
+                stops.add(new Stop(value[4], value[3], Double.parseDouble(value[1]), Double.parseDouble(value[0]), StopType.SUBWAY));
             }
         } catch (Exception e) {
             e.printStackTrace();
