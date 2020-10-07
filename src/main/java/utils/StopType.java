@@ -2,6 +2,6 @@ package utils;
 
 public enum StopType {
     NONE,
-    LINE,
+    BUS,
     SUBWAY;
 }

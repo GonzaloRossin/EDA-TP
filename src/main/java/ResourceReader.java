@@ -37,7 +37,7 @@ public class ResourceReader {
             List<PlaceLocation> sites = new ArrayList<>();
             while((line=buffer.readLine())!=null){
                 String[] value=line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
-                stops.add(new Stop(value[8], value[2], Double.parseDouble(value[3]), Double.parseDouble(value[4]), StopType.LINE));
+                stops.add(new Stop(value[8], value[2], Double.parseDouble(value[3]), Double.parseDouble(value[4]), StopType.BUS));
             }
         } catch (Exception e) {
             e.printStackTrace();
