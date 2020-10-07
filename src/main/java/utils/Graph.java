@@ -2,11 +2,6 @@ package utils;
 import java.util.*;
 
 public class Graph {
-    static final double BUS_SPEED = 16.67;
-    static final double SUBWAY_SPEED=12.5;
-    static final double FIXED_BUS_PENALTY=calculateWeight(250,FormOfTransport.WALK);
-    static final double FIXED_SUBWAY_PENALTY=calculateWeight(20,FormOfTransport.WALK);
-    static final double WALKING_SPEED = 1.34;
 
     public Map<Stop, Node> nodes;
     private NodeMatrix nodeMatrix;
@@ -34,16 +29,7 @@ public class Graph {
         }
     }
 
-    public static double calculateWeight(double distance, FormOfTransport transport) {
-        double res = 0;
-        if(transport == FormOfTransport.LINE) {
-            res = distance / BUS_SPEED;
-        } else if(transport == FormOfTransport.WALK) {
-            res = (distance / WALKING_SPEED);
-        }else
-            res=(distance/SUBWAY_SPEED);
-        return res;
-    }
+    public static double calculateWeight(double distance, FormOfTransport transport) { return distance/ transport.getSPEED(); }
 
     public void addNode(Stop stop) {
         nodeMatrix.insertBusStop(stop);
@@ -104,19 +90,17 @@ public class Graph {
                 Stop targetStop = targetNode.getStopInfo();
                 double distance = currentStop.distance(targetStop);
                 if(currentStop.stopType==targetStop.stopType && currentStop.getRoute().equals(targetStop.getRoute())){
-                    if(currentStop.stopType==StopType.LINE){
-                        nodes.get(currentStop).addEdge(new Edge(calculateWeight(distance, FormOfTransport.LINE), nodes.get(targetStop), FormOfTransport.LINE));
-                        isConnected = true;
-                    }
-                    else{
+                    if(currentStop.stopType==StopType.BUS)
+                        nodes.get(currentStop).addEdge(new Edge(calculateWeight(distance, FormOfTransport.BUS), nodes.get(targetStop), FormOfTransport.BUS));
+                    else
                         nodes.get(currentStop).addEdge(new Edge(calculateWeight(distance, FormOfTransport.SUBWAY), nodes.get(targetStop), FormOfTransport.SUBWAY));
-                        isConnected = true;
-                    }
+
+                    isConnected = true;
                 } else if(currentStop.distance(targetStop) <= 350) {
                     if(currentStop.stopType==StopType.SUBWAY && targetStop.stopType==StopType.SUBWAY)
-                        nodes.get(currentStop).addEdge(new Edge(calculateWeight(distance, FormOfTransport.WALK)+FIXED_SUBWAY_PENALTY, nodes.get(targetStop), FormOfTransport.WALK));
+                        nodes.get(currentStop).addEdge(new Edge(calculateWeight(distance, FormOfTransport.WALK) + FormOfTransport.SUBWAY.getFIXED_PENALTY(), nodes.get(targetStop), FormOfTransport.WALK));
                     else
-                        nodes.get(currentStop).addEdge(new Edge(calculateWeight(distance, FormOfTransport.WALK)+FIXED_BUS_PENALTY, nodes.get(targetStop), FormOfTransport.WALK));
+                        nodes.get(currentStop).addEdge(new Edge(calculateWeight(distance, FormOfTransport.WALK) + FormOfTransport.BUS.getFIXED_PENALTY(), nodes.get(targetStop), FormOfTransport.WALK));
                     isConnected = true;
                 }
             }
@@ -136,8 +120,8 @@ public class Graph {
                     Node v = edge.getTargetNode();
                     double weight = edge.getWeight();
                     double minDistance = 0;
-                    if (edge.getTransport() == FormOfTransport.LINE) {
-                        minDistance = (node.getMinDistance() + weight) * FormOfTransport.LINE.getPENALTY();
+                    if (edge.getTransport() == FormOfTransport.BUS) {
+                        minDistance = (node.getMinDistance() + weight) * FormOfTransport.BUS.getPENALTY();
                     } else if (edge.getTransport() == FormOfTransport.WALK) {
                         minDistance = (node.getMinDistance() + weight) * FormOfTransport.WALK.getPENALTY();
                     } else if(edge.getTransport()==FormOfTransport.SUBWAY){
