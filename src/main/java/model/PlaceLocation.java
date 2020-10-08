@@ -2,9 +2,9 @@ package model;
 
 public class PlaceLocation {
 
-  private double lat;
-  private double lng;
-  private String name;
+  private final double lat;
+  private final double lng;
+  private final String name;
 
   public PlaceLocation(String name,double lat,double lng) {
     this.lat=lat;

@@ -55,10 +55,11 @@ public class PathSolver {
             if(!currentNode.equals(nOrigin) && !currentNode.equals(nEnd)) {
                 double distanceOrigin = HaversineDistance.distance(currentNode, nOrigin);
                 double distanceEnd = HaversineDistance.distance(currentNode, nEnd);
-                if (distanceOrigin <= START_RADIUS) {
+                if (distanceOrigin <= START_RADIUS && distanceOrigin <= distanceEnd) {
                     nOrigin.addEdge(new Edge(Graph.calculateWeight(distanceOrigin, FormOfTransport.WALK), currentNode, FormOfTransport.WALK));
                     currentNode.addEdge(new Edge(Graph.calculateWeight(distanceOrigin, FormOfTransport.WALK), nOrigin, FormOfTransport.WALK));
-                } else if (distanceEnd <= END_RADIUS) {
+                }
+                if (distanceEnd <= END_RADIUS && distanceEnd < distanceOrigin) {
                     nEnd.addEdge(new Edge(Graph.calculateWeight(distanceEnd, FormOfTransport.WALK), currentNode, FormOfTransport.WALK));
                     currentNode.addEdge(new Edge(Graph.calculateWeight(distanceEnd, FormOfTransport.WALK), nEnd, FormOfTransport.WALK));
                 }

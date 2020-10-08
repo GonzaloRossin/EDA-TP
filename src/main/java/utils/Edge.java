@@ -3,9 +3,9 @@ package utils;
 import java.util.Objects;
 
 public class Edge {
-    private double weight;
-    private Node targetNode;
-    private FormOfTransport transport;
+    private final double weight;
+    private final Node targetNode;
+    private final FormOfTransport transport;
 
     public Edge(double weight, Node targetNode, FormOfTransport transport) {
         this.weight = weight;
@@ -25,9 +25,6 @@ public class Edge {
         return targetNode;
     }
 
-    public void setTargetVertex(Node targetNode) {
-        this.targetNode = targetNode;
-    }
 
     @Override
     public boolean equals(Object o) {

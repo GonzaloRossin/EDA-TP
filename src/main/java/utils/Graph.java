@@ -124,7 +124,7 @@ public class Graph {
                         minDistance = (node.getMinDistance() + weight) * FormOfTransport.BUS.getPENALTY();
                     } else if (edge.getTransport() == FormOfTransport.WALK) {
                         minDistance = (node.getMinDistance() + weight) * FormOfTransport.WALK.getPENALTY();
-                    } else if(edge.getTransport()==FormOfTransport.SUBWAY){
+                    } else if(edge.getTransport()==FormOfTransport.SUBWAY) {
                         minDistance=(node.getMinDistance()+weight)*FormOfTransport.SUBWAY.getPENALTY();
                     }
                     if (minDistance < v.getMinDistance()) {
@@ -139,7 +139,7 @@ public class Graph {
     }
 
     public void removeNode(Node node) {
-        Set<Edge> edges = node.getEdges();
+        List<Edge> edges = node.getEdges();
         for(Edge edge : edges) {
             Node targetNode = edge.getTargetNode();
             targetNode.getEdges().remove(new Edge(edge.getWeight(), node, edge.getTransport()));

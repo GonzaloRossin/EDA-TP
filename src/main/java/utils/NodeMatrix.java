@@ -6,7 +6,7 @@ public class NodeMatrix {
     final int ROW = 100;
     final int COL = 100;
     double minLat = 0 , minLon = 0 , maxLat = 0 , maxLon = 0 ;
-    private NodeSet[][] matrix;
+    private final NodeSet[][] matrix;
     public NodeMatrix(List<Stop> busStopList) {
         matrix = new NodeSet[ROW][COL];
         getMaxMinData(busStopList);

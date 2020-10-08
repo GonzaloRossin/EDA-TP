@@ -3,36 +3,32 @@ package utils;
 import java.util.*;
 
 public class Node implements Comparable<Node> {
-    private Set<Edge> edges;
+    private List<Edge> edges;
     private boolean visitCheck;
     private Node previousNode;
     private double minDistance = Double.MAX_VALUE;
-    private Stop stopInfo;
+    private final Stop stopInfo;
 
 
     public Node(Stop stop) {
         this.stopInfo = stop;
-        this.edges = new HashSet<>();
+        this.edges = new ArrayList<>();
     }
 
     public void addEdge(Edge edge) {
         this.edges.add(edge);
     }
 
-    public Set<Edge> getEdges() {
+    public List<Edge> getEdges() {
         return edges;
     }
 
-    public void setEdges(Set<Edge> edges) {
+    public void setEdges(List<Edge> edges) {
         this.edges = edges;
     }
 
     public boolean isVisited() {
         return visitCheck;
-    }
-
-    public void setNotVisited() {
-        this.visitCheck = false;
     }
 
     public void setPreviousNodeNull() {
@@ -50,7 +46,6 @@ public class Node implements Comparable<Node> {
     public void unSetVisited() {
         this.visitCheck = false;
     }
-
 
     public Node getPreviousNode() {
         return previousNode;

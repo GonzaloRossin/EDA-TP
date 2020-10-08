@@ -4,9 +4,9 @@ import java.util.Objects;
 
 public class Stop {
     private String route;
-    private Double latitude;
-    private Double longitude;
-    private String stopName;
+    private final Double latitude;
+    private final Double longitude;
+    private final String stopName;
     StopType stopType;
 
     public Stop(String route, String stopName, Double latitude, Double longitude,StopType stopType) {

@@ -11,7 +11,7 @@ import java.util.*;
 public class ResourceReader {
     private static List<PlaceLocation> getSites(){
 
-        String Path="C:\\Users\\gonza\\Downloads\\TP EDA - Base\\src\\main\\resources\\espacios-culturales.csv";
+        String Path="G:\\EDA\\EDA-TP\\src\\main\\resources\\espacios-culturales.csv";
         String line;
         List<PlaceLocation> sites=new ArrayList<>();
         try {
@@ -27,7 +27,7 @@ public class ResourceReader {
         return sites;
     }
     public static List<Stop> getStops() {
-        String Path="C:\\Users\\gonza\\Downloads\\TP EDA - Base\\src\\main\\resources\\paradas-de-colectivo.csv";
+        String Path="G:\\EDA\\EDA-TP\\src\\main\\resources\\paradas-de-colectivo.csv";
         String line;
 
         List<Stop> stops = new ArrayList<>();
@@ -42,8 +42,8 @@ public class ResourceReader {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Path="C:\\Users\\gonza\\Downloads\\TP EDA - Base\\src\\main\\resources\\estaciones-de-subte.csv";
-        try {//Se cargan paradas de subte
+        Path="G:\\EDA\\EDA-TP\\src\\main\\resources\\estaciones-de-subte.csv";
+        try {
             BufferedReader buffer = new BufferedReader(new FileReader(Path));
             buffer.readLine();
             while((line=buffer.readLine())!=null){
