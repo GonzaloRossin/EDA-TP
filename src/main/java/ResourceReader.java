@@ -4,25 +4,23 @@ import utils.Stop;
 import utils.StopType;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.*;
 
 public class ResourceReader {
-
-    public static final String CULTURAL_PLACES_PATH = "G:\\EDA\\EDA-TP\\src\\main\\resources\\espacios-culturales.csv";
-    public static final String BUS_STOPS_PATH = "G:\\EDA\\EDA-TP\\src\\main\\resources\\paradas-de-colectivo.csv";
-    public static final String SUBWAY_STOPS_PATH = "G:\\EDA\\EDA-TP\\src\\main\\resources\\estaciones-de-subte.csv";
-    public static final String REDUCED_STOPS_PATH = "G:\\EDA\\EDA-TP\\src\\main\\resources\\reduced_bus_stops.csv";
 
     public static List<PlaceLocation> getSites() {
 
         String line;
         List<PlaceLocation> sites=new ArrayList<>();
         try {
-            BufferedReader buffer= new BufferedReader(new FileReader(CULTURAL_PLACES_PATH));
+            BufferedReader buffer= new BufferedReader(new FileReader(getFileNameFromResource("espacios-culturales.csv")));
             buffer.readLine();
-            while((line=buffer.readLine())!=null){
+            while((line=buffer.readLine()) != null){
                 String[] value=line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
                 sites.add(new PlaceLocation(value[3], Double.parseDouble(value[13]), Double.parseDouble(value[14])));
             }
@@ -33,8 +31,8 @@ public class ResourceReader {
     }
     public static List<Stop> getStops() {
         List<Stop> stops = new ArrayList<>();
-        getBusStops(stops, BUS_STOPS_PATH);
-        getSubwayStops(stops, SUBWAY_STOPS_PATH);
+        getBusStops(stops, getFileNameFromResource("paradas-de-colectivo.csv"));
+        getSubwayStops(stops, getFileNameFromResource("estaciones-de-subte.csv"));
         return stops;
     }
 
@@ -90,5 +88,21 @@ public class ResourceReader {
             }
         }
         return top10;
+    }
+
+    public static String getFileNameFromResource(String fileName) {
+
+        ClassLoader classLoader = ResourceReader.class.getClassLoader();
+        URL resource = classLoader.getResource(fileName);
+        if (resource == null) {
+            throw new IllegalArgumentException("File not found: " + fileName);
+        } else {
+            try {
+                return new File(resource.toURI()).getAbsolutePath();
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+        }
+        return "";
     }
 }

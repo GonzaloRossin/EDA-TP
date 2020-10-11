@@ -15,7 +15,7 @@ public class GraphTest {
     @Test
     void testBusUnreachablePathThrowsWalkable() {
         List<Stop> stopList = new ArrayList<>();
-        ResourceReader.getBusStops(stopList, ResourceReader.REDUCED_STOPS_PATH);
+        ResourceReader.getBusStops(stopList, ResourceReader.getFileNameFromResource("reduced_bus_stops.csv"));
         Graph graph = new Graph(stopList);
         graph.makeEdges();
         PathSolver pathSolver = new PathSolver(graph);
@@ -26,7 +26,7 @@ public class GraphTest {
     @Test
     void testSameBusPathThrows21F() {
         List<Stop> stopList = new ArrayList<>();
-        ResourceReader.getBusStops(stopList, ResourceReader.REDUCED_STOPS_PATH);
+        ResourceReader.getBusStops(stopList, ResourceReader.getFileNameFromResource("reduced_bus_stops.csv"));
         Graph graph = new Graph(stopList);
         graph.makeEdges();
         PathSolver pathSolver = new PathSolver(graph);
@@ -37,7 +37,7 @@ public class GraphTest {
     @Test
     void testSameOriginDestinationThrowsWalkable() {
         List<Stop> stopList = new ArrayList<>();
-        ResourceReader.getBusStops(stopList, ResourceReader.REDUCED_STOPS_PATH);
+        ResourceReader.getBusStops(stopList, ResourceReader.getFileNameFromResource("reduced_bus_stops.csv"));
         Graph graph = new Graph(stopList);
         graph.makeEdges();
         PathSolver pathSolver = new PathSolver(graph);
@@ -48,7 +48,7 @@ public class GraphTest {
     @Test
     void testBusCombinationThrows180A67A() {
         List<Stop> stopList = new ArrayList<>();
-        ResourceReader.getBusStops(stopList, ResourceReader.REDUCED_STOPS_PATH);
+        ResourceReader.getBusStops(stopList, ResourceReader.getFileNameFromResource("reduced_bus_stops.csv"));
         Graph graph = new Graph(stopList);
         graph.makeEdges();
         PathSolver pathSolver = new PathSolver(graph);
