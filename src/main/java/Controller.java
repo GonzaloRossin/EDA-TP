@@ -23,6 +23,6 @@ public class Controller {
   }
 
   public List<PlaceLocation> findPlaces(String searchTerm) {
-    return Arrays.asList(ResourceReader.getTop10(searchTerm));
+    return Arrays.asList(ResourceReader.getTop10(searchTerm,ResourceReader.getSites()));
   }
 }

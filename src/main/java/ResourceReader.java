@@ -15,7 +15,7 @@ public class ResourceReader {
     public static final String SUBWAY_STOPS_PATH = "G:\\EDA\\EDA-TP\\src\\main\\resources\\estaciones-de-subte.csv";
     public static final String REDUCED_STOPS_PATH = "G:\\EDA\\EDA-TP\\src\\main\\resources\\reduced_bus_stops.csv";
 
-    private static List<PlaceLocation> getSites() {
+    public static List<PlaceLocation> getSites() {
 
         String line;
         List<PlaceLocation> sites=new ArrayList<>();
@@ -67,13 +67,13 @@ public class ResourceReader {
     }
 
 
-    public static PlaceLocation[] getTop10(String searchTerm){
+    public static PlaceLocation[] getTop10(String searchTerm,List<PlaceLocation> data){
         int qGrams = 2;
         searchTerm = searchTerm.toUpperCase();
         PlaceLocation[] top10 = new PlaceLocation[10];
         boolean flag;
         Arrays.fill(top10,null);
-        for(PlaceLocation database : getSites()) {
+        for(PlaceLocation database : data) {
             flag = false;
             double similarity = QGrams.similarity(searchTerm, database.getName(), qGrams);
             PlaceLocation candidate = database;
