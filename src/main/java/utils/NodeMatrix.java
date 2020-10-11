@@ -7,6 +7,10 @@ public class NodeMatrix {
     final int COL = 100;
     double minLat = 0 , minLon = 0 , maxLat = 0 , maxLon = 0 ;
     private final NodeSet[][] matrix;
+    public NodeMatrix() {
+        matrix = new NodeSet[ROW][COL];
+    }
+
     public NodeMatrix(List<Stop> busStopList) {
         matrix = new NodeSet[ROW][COL];
         getMaxMinData(busStopList);
@@ -51,6 +55,7 @@ public class NodeMatrix {
     public void insertBusStop(Stop stop) {
         int row = longitudeToRow(stop.getLongitude());
         int col = latitudeToCol(stop.getLatitude());
+        if(row < 0 || row >= ROW || col < 0 || col >= COL) return;
         if(matrix[row][col] == null) {
             matrix[row][col] = new NodeSet();
         }

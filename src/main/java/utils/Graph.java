@@ -8,6 +8,7 @@ public class Graph {
 
     public Graph() {
         nodes = new HashMap<>();
+        nodeMatrix = new NodeMatrix();
     }
 
     public Graph(List<Stop> Stops) {

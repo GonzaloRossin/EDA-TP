@@ -9,13 +9,18 @@ import java.io.IOException;
 import java.util.*;
 
 public class ResourceReader {
-    private static List<PlaceLocation> getSites(){
 
-        String Path="G:\\EDA\\EDA-TP\\src\\main\\resources\\espacios-culturales.csv";
+    public static final String CULTURAL_PLACES_PATH = "G:\\EDA\\EDA-TP\\src\\main\\resources\\espacios-culturales.csv";
+    public static final String BUS_STOPS_PATH = "G:\\EDA\\EDA-TP\\src\\main\\resources\\paradas-de-colectivo.csv";
+    public static final String SUBWAY_STOPS_PATH = "G:\\EDA\\EDA-TP\\src\\main\\resources\\estaciones-de-subte.csv";
+    public static final String REDUCED_STOPS_PATH = "G:\\EDA\\EDA-TP\\src\\main\\resources\\reduced_bus_stops.csv";
+
+    private static List<PlaceLocation> getSites() {
+
         String line;
         List<PlaceLocation> sites=new ArrayList<>();
         try {
-            BufferedReader buffer= new BufferedReader(new FileReader(Path));
+            BufferedReader buffer= new BufferedReader(new FileReader(CULTURAL_PLACES_PATH));
             buffer.readLine();
             while((line=buffer.readLine())!=null){
                 String[] value=line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
@@ -27,14 +32,17 @@ public class ResourceReader {
         return sites;
     }
     public static List<Stop> getStops() {
-        String Path="G:\\EDA\\EDA-TP\\src\\main\\resources\\paradas-de-colectivo.csv";
-        String line;
-
         List<Stop> stops = new ArrayList<>();
+        getBusStops(stops, BUS_STOPS_PATH);
+        getSubwayStops(stops, SUBWAY_STOPS_PATH);
+        return stops;
+    }
+
+    public static void getBusStops(List<Stop> stops, String path) {
+        String line;
         try {
-            BufferedReader buffer = new BufferedReader(new FileReader(Path));
+            BufferedReader buffer = new BufferedReader(new FileReader(path));
             buffer.readLine();
-            List<PlaceLocation> sites = new ArrayList<>();
             while((line=buffer.readLine())!=null){
                 String[] value=line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
                 stops.add(new Stop(value[8], value[2], Double.parseDouble(value[3]), Double.parseDouble(value[4]), StopType.BUS));
@@ -42,9 +50,12 @@ public class ResourceReader {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Path="G:\\EDA\\EDA-TP\\src\\main\\resources\\estaciones-de-subte.csv";
+    }
+
+    public static void getSubwayStops(List<Stop> stops, String path) {
+        String line;
         try {
-            BufferedReader buffer = new BufferedReader(new FileReader(Path));
+            BufferedReader buffer = new BufferedReader(new FileReader(path));
             buffer.readLine();
             while((line=buffer.readLine())!=null){
                 String[] value=line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
@@ -53,8 +64,8 @@ public class ResourceReader {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return stops;
     }
+
 
     public static PlaceLocation[] getTop10(String searchTerm){
         int qGrams = 2;
